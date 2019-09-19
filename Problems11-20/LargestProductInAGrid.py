@@ -21,25 +21,54 @@ grid = [
     [1, 70, 54, 71, 83, 51, 54, 69, 16, 92, 33, 48, 61, 43, 52, 1, 89, 19, 67, 48]
 ]
 
-def prodMode(i, j, mode):
-    pass
+def prodMode(row, col, adj, mode):
+    prod = 1
+    if mode == 0:
+        for i in range(adj):
+            prod *= grid[row + i][col]
+    elif mode == 1:
+        for i in range(adj):
+            prod *= grid[row][col + i]
+    elif mode == 2:
+        for i in range(adj):
+            prod *= grid[row - i][col + i]
+    elif mode == 3:
+        for i in range(adj):
+            prod *= grid[row + i][col + i]
+    # Gonna just pretend I do error handling
+    else:
+        return -1
+    return prod
 
 adj = 4
 maxProduct = 1
+down = 0 
+right = 0 
+upRight = 0 
+downRight = 0
+# This is kind of a mess
+# I'm not sure if these tests should be a bit better explained or less obtuse 
 for i, row in enumerate(grid):
     for j, col in enumerate(grid[i]):
         temp = 1
         n = 1
         # Down
         if i + adj < len(grid):
-            prodMode(i, j, 0)
+            down = prodMode(i, j, adj, 0)
         # Right
         if j + adj < len(grid[j]):
-            prodMode(i, j, 1)
+            right = prodMode(i, j, adj, 1)
         # Up Right
         if i - adj >= 0 and j + adj < len(grid[j]):
-            prodMode(i, j, 2)
+            upRight = prodMode(i, j, adj, 2)
         # Down Right
         if i + adj < len(grid) and j + adj < len(grid[j]):
-            prodMode(i, j, 3)
+            downRight = prodMode(i, j, adj, 3)
+        
+        currentMax = max(down, right, upRight, downRight)
+
+        if currentMax > maxProduct:
+            maxProduct = currentMax
+
+print(maxProduct) 
 
